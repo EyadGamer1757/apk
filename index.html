@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Code Editor and Compiler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        textarea, iframe {
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        textarea {
+            height: 400px;
+        }
+        iframe {
+            height: 500px;
+        }
+        input[type="file"], input#name {
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Combined Code Editor and HTML Compiler</h1>
+
+    <!-- Code Editor Section -->
+    <input id="name" placeholder="Enter file name"/>
+    <textarea id="inputText" rows="10" cols="30" placeholder="Enter your text here...">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" /> <!-- Don't Delete -->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script> <!-- Don't Delete -->
+    <style>
+        /* CSS */
+    </style>
+</head>
+<body>
+    <!-- HTML -->
+    <script>
+        // JS 
+    </script>
+    <py-script>
+        #Python Code
+    </py-script>
+</body>
+</html>
+    </textarea>
+    <button onclick="runCode()">Run Code</button>
+    <button onclick="createCodeFile()">Download Project</button>
+
+    <!-- HTML File Compiler Section -->
+    <input type="file" id="fileInput" accept=".html">
+    <iframe id="output"></iframe>
+
+    <script>
+        function runCode() {
+            // Get the user's input text
+            const text = document.getElementById('inputText').value;
+            // OUTPUT
+            var output = document.getElementById('output');
+            //Run Code
+            output.srcdoc = text;
+        }
+
+        function createCodeFile() {
+            // Get the file name
+            var name = document.getElementById('name').value;
+            // Get the user's input text
+            const text = document.getElementById('inputText').value;
+
+            if (!text) {
+                alert("Please enter some text.");
+                return;
+            }
+
+            // Create a new Blob containing the text
+            const blob = new Blob([text], { type: 'text/html' });
+            
+            // Create a link element
+            const link = document.createElement('a');
+            
+            // Set the download attribute with a desired filename
+            link.download = name + '.html';
+            
+            // Create a URL for the Blob and set it as the href attribute
+            link.href = window.URL.createObjectURL(blob);
+            
+            // Append the link to the body (necessary for Firefox)
+            document.body.appendChild(link);
+            
+            // Programmatically click the link to trigger the download
+            link.click();
+            
+            // Remove the link after triggering the download
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'text/html') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    const iframe = document.getElementById('output');
+                    iframe.srcdoc = content;
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please select a valid HTML file.');
+            }
+        });
+    </script>
+</body>
+</html>
